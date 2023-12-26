@@ -22,6 +22,8 @@ class Rover {
         return new Rover(this.latitude, this.longitude, Orientation.WEST);
       case 'R':
         return new Rover(this.latitude, this.longitude, Orientation.EAST);
+      case 'F':
+        return new Rover(this.latitude, this.longitude + 1, this.orientation);
     }
     return new Rover(this.latitude, this.longitude, this.orientation);
   }
@@ -44,5 +46,11 @@ describe('Rover', () => {
     const rover = Rover.create(0, 0, Orientation.NORTH);
 
     expect(rover.move('R').position()).toBe('0:0:E');
+  })
+
+  it('should move forward in the current direction with a FORWARD command', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('F').position()).toBe('0:1:N');
   })
 });
