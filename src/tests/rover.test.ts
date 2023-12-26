@@ -5,6 +5,12 @@ enum Orientation {
   SOUTH = 'S'
 };
 
+enum Command {
+  LEFT = 'L',
+  RIGHT = 'R',
+  FORWARD = 'F'
+};
+
 class Rover {
   private constructor(private latitude: number, private longitude: number, private orientation: Orientation) { }
 
@@ -17,15 +23,26 @@ class Rover {
   }
 
   move(commands: string) {
-    switch (commands) {
-      case 'L':
-        return new Rover(this.latitude, this.longitude, Orientation.WEST);
-      case 'R':
-        return new Rover(this.latitude, this.longitude, Orientation.EAST);
-      case 'F':
-        return new Rover(this.latitude, this.longitude + 1, this.orientation);
-    }
-    return new Rover(this.latitude, this.longitude, this.orientation);
+    return commands.split('').reduce<Rover>((rover, command) => {
+      switch (command) {
+        case Command.LEFT:
+          return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
+        case Command.RIGHT:
+          return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
+        case Command.FORWARD:
+          switch (rover.orientation) {
+            case Orientation.NORTH:
+              return new Rover(rover.latitude, rover.longitude + 1, rover.orientation);
+            case Orientation.SOUTH:
+              return new Rover(rover.latitude, rover.longitude - 1, rover.orientation);
+            case Orientation.WEST:
+              return new Rover(rover.latitude + 1, rover.longitude, rover.orientation);
+            case Orientation.EAST:
+              return new Rover(rover.latitude - 1, rover.longitude, rover.orientation);
+          }
+      }
+      return new Rover(rover.latitude, rover.longitude, rover.orientation);
+    }, this);
   }
 }
 
@@ -52,5 +69,11 @@ describe('Rover', () => {
     const rover = Rover.create(0, 0, Orientation.NORTH);
 
     expect(rover.move('F').position()).toBe('0:1:N');
+  });
+
+  it('should handle many commands', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('LF').position()).toBe('1:0:W');
   });
 });
