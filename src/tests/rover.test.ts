@@ -17,7 +17,13 @@ class Rover {
   }
 
   move(commands: string) {
-    return new Rover(this.latitude, this.longitude, Orientation.WEST);
+    switch (commands) {
+      case 'L':
+        return new Rover(this.latitude, this.longitude, Orientation.WEST);
+      case 'R':
+        return new Rover(this.latitude, this.longitude, Orientation.EAST);
+    }
+    return new Rover(this.latitude, this.longitude, this.orientation);
   }
 }
 
@@ -32,5 +38,11 @@ describe('Rover', () => {
     const rover = Rover.create(0, 0, Orientation.NORTH);
 
     expect(rover.move('L').position()).toBe('0:0:W');
+  })
+
+  it('should rotate east with a RIGHT comand', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('R').position()).toBe('0:0:E');
   })
 });
