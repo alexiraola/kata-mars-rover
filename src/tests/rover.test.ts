@@ -26,23 +26,35 @@ class Rover {
     return commands.split('').reduce<Rover>((rover, command) => {
       switch (command) {
         case Command.LEFT:
-          return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
+          return this.moveLeft(rover);
         case Command.RIGHT:
-          return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
+          return this.moveRight(rover);
         case Command.FORWARD:
-          switch (rover.orientation) {
-            case Orientation.NORTH:
-              return new Rover(rover.latitude, rover.longitude + 1, rover.orientation);
-            case Orientation.SOUTH:
-              return new Rover(rover.latitude, rover.longitude - 1, rover.orientation);
-            case Orientation.WEST:
-              return new Rover(rover.latitude + 1, rover.longitude, rover.orientation);
-            case Orientation.EAST:
-              return new Rover(rover.latitude - 1, rover.longitude, rover.orientation);
-          }
+          return this.moveForward(rover);
       }
-      return new Rover(rover.latitude, rover.longitude, rover.orientation);
+      return rover;
     }, this);
+  }
+
+  private moveLeft(rover: Rover) {
+    return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
+  }
+
+  private moveRight(rover: Rover) {
+    return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
+  }
+
+  private moveForward(rover: Rover) {
+    switch (rover.orientation) {
+      case Orientation.NORTH:
+        return new Rover(rover.latitude, rover.longitude + 1, rover.orientation);
+      case Orientation.SOUTH:
+        return new Rover(rover.latitude, rover.longitude - 1, rover.orientation);
+      case Orientation.WEST:
+        return new Rover(rover.latitude + 1, rover.longitude, rover.orientation);
+      case Orientation.EAST:
+        return new Rover(rover.latitude - 1, rover.longitude, rover.orientation);
+    }
   }
 }
 
@@ -51,6 +63,12 @@ describe('Rover', () => {
     const rover = Rover.create(0, 0, Orientation.NORTH);
 
     expect(rover.position()).toBe('0:0:N');
+  });
+
+  it('should return the same rover is empty commands provided', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('').position()).toBe('0:0:N');
   });
 
   it('should rotate west with a LEFT comand', () => {
