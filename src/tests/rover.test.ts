@@ -50,7 +50,16 @@ class Rover {
   }
 
   private moveRight(rover: Rover) {
-    return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
+    switch (rover.orientation) {
+      case Orientation.NORTH:
+        return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
+      case Orientation.WEST:
+        return new Rover(rover.latitude, rover.longitude, Orientation.NORTH);
+      case Orientation.EAST:
+        return new Rover(rover.latitude, rover.longitude, Orientation.SOUTH);
+      case Orientation.SOUTH:
+        return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
+    }
   }
 
   private moveForward(rover: Rover) {
@@ -99,5 +108,12 @@ describe('Rover', () => {
     expect(rover.move('LL').position()).toBe('0:0:S');
     expect(rover.move('LLL').position()).toBe('0:0:E');
     expect(rover.move('LLLL').position()).toBe('0:0:N');
+  });
+
+  it('should rotate counterclockwise with RIGHT commands', () => {
+    expect(rover.move('R').position()).toBe('0:0:E');
+    expect(rover.move('RR').position()).toBe('0:0:S');
+    expect(rover.move('RRR').position()).toBe('0:0:W');
+    expect(rover.move('RRRR').position()).toBe('0:0:N');
   });
 });
