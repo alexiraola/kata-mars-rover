@@ -1,3 +1,5 @@
+import { argv0 } from "process";
+
 export enum Orientation {
   NORTH = 'N',
   WEST = 'W',
@@ -65,14 +67,38 @@ export class Rover {
   private moveForward(rover: Rover) {
     switch (rover.orientation) {
       case Orientation.NORTH:
-        return new Rover(rover.latitude, rover.longitude + 1, rover.orientation);
+        return new Rover(rover.latitude, rover.increaseLongitude(), rover.orientation);
       case Orientation.SOUTH:
-        return new Rover(rover.latitude, rover.longitude - 1, rover.orientation);
-      case Orientation.WEST:
-        return new Rover(rover.latitude + 1, rover.longitude, rover.orientation);
+        return new Rover(rover.latitude, rover.decreaseLongitude(), rover.orientation);
       case Orientation.EAST:
-        return new Rover(rover.latitude - 1, rover.longitude, rover.orientation);
+        return new Rover(rover.increaseLatitude(), rover.longitude, rover.orientation);
+      case Orientation.WEST:
+        return new Rover(rover.decreaseLatitude(), rover.longitude, rover.orientation);
     }
+  }
+
+  private increaseLatitude() {
+    return this.latitude === 9
+      ? 0
+      : this.latitude + 1
+  }
+
+  private decreaseLatitude() {
+    return this.latitude === 0
+      ? 9
+      : this.latitude - 1
+  }
+
+  private increaseLongitude() {
+    return this.longitude === 9
+      ? 0
+      : this.longitude + 1
+  }
+
+  private decreaseLongitude() {
+    return this.longitude === 0
+      ? 9
+      : this.longitude - 1
   }
 }
 

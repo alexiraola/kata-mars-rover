@@ -15,16 +15,10 @@ describe('Rover', () => {
     expect(rover.move('').position()).toBe('0:0:N');
   });
 
-  it('should rotate east with a RIGHT comand', () => {
-    expect(rover.move('R').position()).toBe('0:0:E');
-  });
-
-  it('should move forward in the current direction with a FORWARD command', () => {
-    expect(rover.move('F').position()).toBe('0:1:N');
-  });
-
   it('should handle many commands', () => {
-    expect(rover.move('LF').position()).toBe('1:0:W');
+    expect(rover.move('LF').position()).toBe('9:0:W');
+    expect(rover.move('RFF').position()).toBe('2:0:E');
+    expect(rover.move('FRFFR').position()).toBe('2:1:S');
   });
 
   it('should rotate clockwise with LEFT commands', () => {
@@ -39,5 +33,10 @@ describe('Rover', () => {
     expect(rover.move('RR').position()).toBe('0:0:S');
     expect(rover.move('RRR').position()).toBe('0:0:W');
     expect(rover.move('RRRR').position()).toBe('0:0:N');
+  });
+
+  it('should round the position on the edges', () => {
+    expect(rover.move('LFF').position()).toBe('8:0:W');
+    expect(rover.move('LLFF').position()).toBe('0:8:S');
   });
 });
