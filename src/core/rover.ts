@@ -67,38 +67,28 @@ export class Rover {
   private moveForward(rover: Rover) {
     switch (rover.orientation) {
       case Orientation.NORTH:
-        return new Rover(rover.latitude, rover.increaseLongitude(), rover.orientation);
+        return new Rover(rover.latitude, this.nextPosition(rover.longitude), rover.orientation);
       case Orientation.SOUTH:
-        return new Rover(rover.latitude, rover.decreaseLongitude(), rover.orientation);
+        return new Rover(rover.latitude, this.prevPosition(rover.longitude), rover.orientation);
       case Orientation.EAST:
-        return new Rover(rover.increaseLatitude(), rover.longitude, rover.orientation);
+        return new Rover(this.nextPosition(rover.latitude), rover.longitude, rover.orientation);
       case Orientation.WEST:
-        return new Rover(rover.decreaseLatitude(), rover.longitude, rover.orientation);
+        return new Rover(this.prevPosition(rover.latitude), rover.longitude, rover.orientation);
     }
   }
 
-  private increaseLatitude() {
-    return this.latitude === 9
+  private nextPosition(position: number) {
+    const maxPosition = 9;
+    return position === maxPosition
       ? 0
-      : this.latitude + 1
+      : position + 1
   }
 
-  private decreaseLatitude() {
-    return this.latitude === 0
-      ? 9
-      : this.latitude - 1
-  }
-
-  private increaseLongitude() {
-    return this.longitude === 9
-      ? 0
-      : this.longitude + 1
-  }
-
-  private decreaseLongitude() {
-    return this.longitude === 0
-      ? 9
-      : this.longitude - 1
+  private prevPosition(position: number) {
+    const maxPosition = 9;
+    return position === 0
+      ? maxPosition
+      : position - 1
   }
 }
 
