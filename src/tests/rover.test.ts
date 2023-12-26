@@ -37,7 +37,16 @@ class Rover {
   }
 
   private moveLeft(rover: Rover) {
-    return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
+    switch (rover.orientation) {
+      case Orientation.NORTH:
+        return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
+      case Orientation.WEST:
+        return new Rover(rover.latitude, rover.longitude, Orientation.SOUTH);
+      case Orientation.EAST:
+        return new Rover(rover.latitude, rover.longitude, Orientation.NORTH);
+      case Orientation.SOUTH:
+        return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
+    }
   }
 
   private moveRight(rover: Rover) {
@@ -93,5 +102,23 @@ describe('Rover', () => {
     const rover = Rover.create(0, 0, Orientation.NORTH);
 
     expect(rover.move('LF').position()).toBe('1:0:W');
+  });
+
+  it('should rotate SOUTH with two LEFT commands', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('LL').position()).toBe('0:0:S');
+  });
+
+  it('should rotate EAST with three LEFT commands', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('LLL').position()).toBe('0:0:E');
+  });
+
+  it('should rotate NORTH with four LEFT commands', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('LLLL').position()).toBe('0:0:N');
   });
 });
