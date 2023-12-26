@@ -68,57 +68,45 @@ class Rover {
 }
 
 describe('Rover', () => {
-  it('should create a Rover with an initial position and orientation', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
+  let rover: Rover;
 
+  beforeEach(() => {
+    rover = Rover.create(0, 0, Orientation.NORTH);
+  });
+
+  it('should create a Rover with an initial position and orientation', () => {
     expect(rover.position()).toBe('0:0:N');
   });
 
   it('should return the same rover is empty commands provided', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('').position()).toBe('0:0:N');
   });
 
   it('should rotate west with a LEFT comand', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('L').position()).toBe('0:0:W');
   });
 
   it('should rotate east with a RIGHT comand', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('R').position()).toBe('0:0:E');
   });
 
   it('should move forward in the current direction with a FORWARD command', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('F').position()).toBe('0:1:N');
   });
 
   it('should handle many commands', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('LF').position()).toBe('1:0:W');
   });
 
   it('should rotate SOUTH with two LEFT commands', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('LL').position()).toBe('0:0:S');
   });
 
   it('should rotate EAST with three LEFT commands', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('LLL').position()).toBe('0:0:E');
   });
 
   it('should rotate NORTH with four LEFT commands', () => {
-    const rover = Rover.create(0, 0, Orientation.NORTH);
-
     expect(rover.move('LLLL').position()).toBe('0:0:N');
   });
 });
