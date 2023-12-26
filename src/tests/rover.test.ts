@@ -15,6 +15,10 @@ class Rover {
   position() {
     return `${this.latitude}:${this.longitude}:${this.orientation}`;
   }
+
+  move(commands: string) {
+    return new Rover(this.latitude, this.longitude, Orientation.WEST);
+  }
 }
 
 describe('Rover', () => {
@@ -23,4 +27,10 @@ describe('Rover', () => {
 
     expect(rover.position()).toBe('0:0:N');
   });
+
+  it('should rotate west with a LEFT comand', () => {
+    const rover = Rover.create(0, 0, Orientation.NORTH);
+
+    expect(rover.move('L').position()).toBe('0:0:W');
+  })
 });
