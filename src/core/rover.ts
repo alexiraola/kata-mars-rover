@@ -1,5 +1,3 @@
-import { argv0 } from "process";
-
 export enum Orientation {
   NORTH = 'N',
   WEST = 'W',
