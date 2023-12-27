@@ -40,4 +40,10 @@ describe('Rover', () => {
     expect(rover.move('LFF').toString()).toBe('8:0:W');
     expect(rover.move('LLFF').toString()).toBe('0:8:S');
   });
+
+  it('throws an error if an invalid command is provided', () => {
+    expect(() => {
+      rover.move('LFB');
+    }).toThrow('Unknown command: B');
+  });
 });

@@ -16,6 +16,7 @@ export class CommandFactory {
       case CommandType.FORWARD:
         return new ForwardCommand();
     }
+    throw new Error(`Unknown command: ${command}`);
   }
 }
 
