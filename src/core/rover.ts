@@ -1,11 +1,7 @@
+import { CommandFactory } from "./command";
 import { Coordinate } from "./coordinate";
 import { Orientation, Location, LocationFactory } from "./location";
 
-enum Command {
-  LEFT = 'L',
-  RIGHT = 'R',
-  FORWARD = 'F'
-};
 export class Rover {
   private constructor(private location: Location) { }
 
@@ -21,17 +17,14 @@ export class Rover {
   }
 
   move(commands: string) {
-    return commands.split('').reduce<Rover>((rover, command) => {
-      switch (command) {
-        case Command.LEFT:
-          return new Rover(rover.location.rotateLeft());
-        case Command.RIGHT:
-          return new Rover(rover.location.rotateRight());
-        case Command.FORWARD:
-          return new Rover(rover.location.moveForward());
-      }
-      return rover;
+    return this.getCommands(commands).reduce<Rover>((rover, command) => {
+      const location = CommandFactory.createCommand(command).apply(rover.location);
+      return new Rover(location);
     }, this);
+  }
+
+  private getCommands(commands: string) {
+    return commands.split('');
   }
 }
 
