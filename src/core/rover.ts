@@ -13,7 +13,7 @@ export class Rover {
   }
 
   toString() {
-    return this.location.position();
+    return this.location.toString();
   }
 
   move(commands: string) {

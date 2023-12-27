@@ -23,16 +23,16 @@ export class LocationFactory {
 }
 
 export interface Location {
-  position(): string;
+  toString(): string;
   rotateLeft(): Location;
   rotateRight(): Location;
   moveForward(): Location;
 }
 
-export class NorthLocation implements Location {
+class NorthLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
-  position() {
+  toString() {
     return `${this.coordinate}:${Orientation.NORTH}`;
   }
 
@@ -49,10 +49,10 @@ export class NorthLocation implements Location {
   }
 }
 
-export class SouthLocation implements Location {
+class SouthLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
-  position() {
+  toString() {
     return `${this.coordinate}:${Orientation.SOUTH}`;
   }
 
@@ -69,10 +69,10 @@ export class SouthLocation implements Location {
   }
 }
 
-export class WestLocation implements Location {
+class WestLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
-  position(): string {
+  toString(): string {
     return `${this.coordinate}:${Orientation.WEST}`;
   }
 
@@ -89,10 +89,10 @@ export class WestLocation implements Location {
   }
 }
 
-export class EastLocation implements Location {
+class EastLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
-  position(): string {
+  toString(): string {
     return `${this.coordinate}:${Orientation.EAST}`;
   }
 
