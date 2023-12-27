@@ -11,82 +11,164 @@ enum Command {
   FORWARD = 'F'
 };
 
+export class Coordinate {
+  private maxLatitude = 9;
+  private maxLongitude = 9;
+
+  constructor(private latitude: number, private longitude: number) { }
+
+  toString() {
+    return `${this.latitude}:${this.longitude}`;
+  }
+
+  increaseLatitude() {
+    const latitude = this.latitude === this.maxLatitude
+      ? 0
+      : this.latitude + 1;
+
+    return new Coordinate(latitude, this.longitude);
+  }
+
+  decreaseLatitude() {
+    const latitude = this.latitude === 0
+      ? this.maxLatitude
+      : this.latitude - 1
+
+    return new Coordinate(latitude, this.longitude);
+  }
+
+  increaseLongitude() {
+    const longitude = this.longitude === this.maxLongitude
+      ? 0
+      : this.longitude + 1;
+
+    return new Coordinate(this.latitude, longitude);
+  }
+
+  decreaseLongitude() {
+    const longitude = this.longitude === 0
+      ? this.maxLongitude
+      : this.longitude - 1;
+
+    return new Coordinate(this.latitude, longitude);
+  }
+}
+
+interface Position {
+  position(): string;
+  rotateLeft(): Position;
+  rotateRight(): Position;
+  moveForward(): Position;
+}
+
+export class NorthPosition implements Position {
+  constructor(private coordinate: Coordinate) { }
+
+  position() {
+    return `${this.coordinate}:${Orientation.NORTH}`;
+  }
+
+  rotateLeft() {
+    return new WestPosition(this.coordinate);
+  }
+
+  rotateRight() {
+    return new EastPosition(this.coordinate);
+  }
+
+  moveForward() {
+    return new NorthPosition(this.coordinate.increaseLongitude());
+  }
+}
+
+export class SouthPosition implements Position {
+  constructor(private coordinate: Coordinate) { }
+
+  position() {
+    return `${this.coordinate}:${Orientation.SOUTH}`;
+  }
+
+  rotateLeft() {
+    return new EastPosition(this.coordinate);
+  }
+
+  rotateRight() {
+    return new WestPosition(this.coordinate);
+  }
+
+  moveForward() {
+    return new SouthPosition(this.coordinate.decreaseLongitude());
+  }
+}
+
+export class WestPosition implements Position {
+  constructor(private coordinate: Coordinate) { }
+
+  position(): string {
+    return `${this.coordinate}:${Orientation.WEST}`;
+  }
+  rotateLeft(): Position {
+    return new SouthPosition(this.coordinate);
+  }
+  rotateRight(): Position {
+    return new NorthPosition(this.coordinate);
+  }
+  moveForward(): Position {
+    return new WestPosition(this.coordinate.decreaseLatitude());
+  }
+}
+
+export class EastPosition implements Position {
+  constructor(private coordinate: Coordinate) { }
+
+  position(): string {
+    return `${this.coordinate}:${Orientation.EAST}`;
+  }
+  rotateLeft(): Position {
+    return new NorthPosition(this.coordinate);
+  }
+  rotateRight(): Position {
+    return new SouthPosition(this.coordinate);
+  }
+  moveForward(): Position {
+    return new EastPosition(this.coordinate.increaseLatitude());
+  }
+}
+
 export class Rover {
-  private constructor(private latitude: number, private longitude: number, private orientation: Orientation) { }
+  private constructor(private pos: Position) { }
 
   static create(latitude: number, longitude: number, orientation: Orientation) {
-    return new Rover(latitude, longitude, orientation);
+    const coordinate = new Coordinate(latitude, longitude);
+
+    switch (orientation) {
+      case Orientation.NORTH:
+        return new Rover(new NorthPosition(coordinate));
+      case Orientation.WEST:
+        return new Rover(new WestPosition(coordinate));
+      case Orientation.EAST:
+        return new Rover(new EastPosition(coordinate));
+      case Orientation.SOUTH:
+        return new Rover(new SouthPosition(coordinate));
+    }
   }
 
   position() {
-    return `${this.latitude}:${this.longitude}:${this.orientation}`;
+    return this.pos.position();
   }
 
   move(commands: string) {
     return commands.split('').reduce<Rover>((rover, command) => {
       switch (command) {
         case Command.LEFT:
-          return this.moveLeft(rover);
+          return new Rover(rover.pos.rotateLeft());
         case Command.RIGHT:
-          return this.moveRight(rover);
+          return new Rover(rover.pos.rotateRight());
         case Command.FORWARD:
-          return this.moveForward(rover);
+          return new Rover(rover.pos.moveForward());
       }
       return rover;
     }, this);
-  }
-
-  private moveLeft(rover: Rover) {
-    switch (rover.orientation) {
-      case Orientation.NORTH:
-        return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
-      case Orientation.WEST:
-        return new Rover(rover.latitude, rover.longitude, Orientation.SOUTH);
-      case Orientation.EAST:
-        return new Rover(rover.latitude, rover.longitude, Orientation.NORTH);
-      case Orientation.SOUTH:
-        return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
-    }
-  }
-
-  private moveRight(rover: Rover) {
-    switch (rover.orientation) {
-      case Orientation.NORTH:
-        return new Rover(rover.latitude, rover.longitude, Orientation.EAST);
-      case Orientation.WEST:
-        return new Rover(rover.latitude, rover.longitude, Orientation.NORTH);
-      case Orientation.EAST:
-        return new Rover(rover.latitude, rover.longitude, Orientation.SOUTH);
-      case Orientation.SOUTH:
-        return new Rover(rover.latitude, rover.longitude, Orientation.WEST);
-    }
-  }
-
-  private moveForward(rover: Rover) {
-    switch (rover.orientation) {
-      case Orientation.NORTH:
-        return new Rover(rover.latitude, this.nextPosition(rover.longitude), rover.orientation);
-      case Orientation.SOUTH:
-        return new Rover(rover.latitude, this.prevPosition(rover.longitude), rover.orientation);
-      case Orientation.EAST:
-        return new Rover(this.nextPosition(rover.latitude), rover.longitude, rover.orientation);
-      case Orientation.WEST:
-        return new Rover(this.prevPosition(rover.latitude), rover.longitude, rover.orientation);
-    }
-  }
-
-  private nextPosition(position: number) {
-    const maxPosition = 9;
-    return position === maxPosition
-      ? 0
-      : position + 1
-  }
-
-  private prevPosition(position: number) {
-    const maxPosition = 9;
-    return position === 0
-      ? maxPosition
-      : position - 1
   }
 }
 
