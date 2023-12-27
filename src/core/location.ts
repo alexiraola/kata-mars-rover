@@ -7,6 +7,21 @@ export enum Orientation {
   SOUTH = 'S'
 };
 
+export class LocationFactory {
+  static createLocation(coordinate: Coordinate, orientation: Orientation) {
+    switch (orientation) {
+      case Orientation.NORTH:
+        return new NorthLocation(coordinate);
+      case Orientation.WEST:
+        return new WestLocation(coordinate);
+      case Orientation.EAST:
+        return new EastLocation(coordinate);
+      case Orientation.SOUTH:
+        return new SouthLocation(coordinate);
+    }
+  }
+}
+
 export interface Location {
   position(): string;
   rotateLeft(): Location;
@@ -14,7 +29,7 @@ export interface Location {
   moveForward(): Location;
 }
 
-export class NorthPosition implements Location {
+export class NorthLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
   position() {
@@ -22,19 +37,19 @@ export class NorthPosition implements Location {
   }
 
   rotateLeft() {
-    return new WestPosition(this.coordinate);
+    return new WestLocation(this.coordinate);
   }
 
   rotateRight() {
-    return new EastPosition(this.coordinate);
+    return new EastLocation(this.coordinate);
   }
 
   moveForward() {
-    return new NorthPosition(this.coordinate.increaseLongitude());
+    return new NorthLocation(this.coordinate.increaseLongitude());
   }
 }
 
-export class SouthPosition implements Location {
+export class SouthLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
   position() {
@@ -42,49 +57,55 @@ export class SouthPosition implements Location {
   }
 
   rotateLeft() {
-    return new EastPosition(this.coordinate);
+    return new EastLocation(this.coordinate);
   }
 
   rotateRight() {
-    return new WestPosition(this.coordinate);
+    return new WestLocation(this.coordinate);
   }
 
   moveForward() {
-    return new SouthPosition(this.coordinate.decreaseLongitude());
+    return new SouthLocation(this.coordinate.decreaseLongitude());
   }
 }
 
-export class WestPosition implements Location {
+export class WestLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
   position(): string {
     return `${this.coordinate}:${Orientation.WEST}`;
   }
+
   rotateLeft(): Location {
-    return new SouthPosition(this.coordinate);
+    return new SouthLocation(this.coordinate);
   }
+
   rotateRight(): Location {
-    return new NorthPosition(this.coordinate);
+    return new NorthLocation(this.coordinate);
   }
+
   moveForward(): Location {
-    return new WestPosition(this.coordinate.decreaseLatitude());
+    return new WestLocation(this.coordinate.decreaseLatitude());
   }
 }
 
-export class EastPosition implements Location {
+export class EastLocation implements Location {
   constructor(private coordinate: Coordinate) { }
 
   position(): string {
     return `${this.coordinate}:${Orientation.EAST}`;
   }
+
   rotateLeft(): Location {
-    return new NorthPosition(this.coordinate);
+    return new NorthLocation(this.coordinate);
   }
+
   rotateRight(): Location {
-    return new SouthPosition(this.coordinate);
+    return new SouthLocation(this.coordinate);
   }
+
   moveForward(): Location {
-    return new EastPosition(this.coordinate.increaseLatitude());
+    return new EastLocation(this.coordinate.increaseLatitude());
   }
 }
 

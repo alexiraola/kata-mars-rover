@@ -1,5 +1,5 @@
 import { Coordinate } from "./coordinate";
-import { EastPosition, NorthPosition, Orientation, Location, SouthPosition, WestPosition } from "./location";
+import { Orientation, Location, LocationFactory } from "./location";
 
 enum Command {
   LEFT = 'L',
@@ -11,17 +11,9 @@ export class Rover {
 
   static create(latitude: number, longitude: number, orientation: Orientation) {
     const coordinate = new Coordinate(latitude, longitude);
+    const location = LocationFactory.createLocation(coordinate, orientation);
 
-    switch (orientation) {
-      case Orientation.NORTH:
-        return new Rover(new NorthPosition(coordinate));
-      case Orientation.WEST:
-        return new Rover(new WestPosition(coordinate));
-      case Orientation.EAST:
-        return new Rover(new EastPosition(coordinate));
-      case Orientation.SOUTH:
-        return new Rover(new SouthPosition(coordinate));
-    }
+    return new Rover(location);
   }
 
   toString() {
