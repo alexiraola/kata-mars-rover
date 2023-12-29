@@ -7,7 +7,7 @@ export enum CommandType {
 };
 
 export class CommandFactory {
-  static createCommand(command: string) {
+  static createCommand(command: string): Command {
     switch (command) {
       case CommandType.LEFT:
         return new LeftCommand();

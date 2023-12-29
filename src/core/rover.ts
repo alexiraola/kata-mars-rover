@@ -1,14 +1,10 @@
 import { CommandFactory } from "./command";
-import { Coordinate } from "./coordinate";
-import { Orientation, Navigator, NavigatorFactory } from "./navigator";
+import { Navigator } from "./navigator";
 
 export class Rover {
   private constructor(private navigator: Navigator) { }
 
-  static create(latitude: number, longitude: number, orientation: Orientation) {
-    const coordinate = Coordinate.create(latitude, longitude);
-    const navigator = NavigatorFactory.createNavigator(coordinate, orientation);
-
+  static create(navigator: Navigator) {
     return new Rover(navigator);
   }
 
@@ -18,13 +14,12 @@ export class Rover {
 
   move(commands: string) {
     return this.getCommands(commands).reduce<Rover>((rover, command) => {
-      const navigator = CommandFactory.createCommand(command).apply(rover.navigator);
-      return new Rover(navigator);
+      return Rover.create((command.apply(rover.navigator)));
     }, this);
   }
 
   private getCommands(commands: string) {
-    return commands.split('');
+    return commands.split('').map(CommandFactory.createCommand);
   }
 }
 

@@ -1,11 +1,14 @@
-import { Orientation } from '../core/navigator';
+import { Coordinate } from '../core/coordinate';
+import { NavigatorFactory, Orientation } from '../core/navigator';
 import { Rover } from '../core/rover';
 
 describe('Rover', () => {
   let rover: Rover;
 
   beforeEach(() => {
-    rover = Rover.create(0, 0, Orientation.NORTH);
+    const coordinate = Coordinate.create(0, 0);
+    const navigator = NavigatorFactory.createNavigator(coordinate, Orientation.NORTH);
+    rover = Rover.create(navigator);
   });
 
   it('should handle many commands', () => {
