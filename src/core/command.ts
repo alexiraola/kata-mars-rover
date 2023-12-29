@@ -21,23 +21,23 @@ export class CommandFactory {
 }
 
 export interface Command {
-  apply(location: Navigator): Navigator;
+  apply(navigator: Navigator): Navigator;
 }
 
 class LeftCommand implements Command {
-  apply(location: Navigator) {
-    return location.rotateLeft();
+  apply(navigator: Navigator) {
+    return navigator.rotateLeft();
   }
 }
 
 class RightCommand implements Command {
-  apply(location: Navigator) {
-    return location.rotateRight();
+  apply(navigator: Navigator) {
+    return navigator.rotateRight();
   }
 }
 
 class ForwardCommand implements Command {
-  apply(location: Navigator) {
-    return location.moveForward();
+  apply(navigator: Navigator) {
+    return navigator.moveForward();
   }
 }
