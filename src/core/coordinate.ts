@@ -1,12 +1,18 @@
 export class Coordinate {
-  private planetWidth = 10;
-  private planetHeight = 10;
+  private static readonly planetWidth = 10;
+  private static readonly planetHeight = 10;
 
   constructor(private latitude: number, private longitude: number) { }
 
   static create(latitude: number, longitude: number) {
     if (latitude < 0 || longitude < 0) {
       throw new Error('Negative values are not allowed');
+    }
+    if (latitude >= this.planetWidth) {
+      throw new Error(`Latitude cannot be bigger than ${Coordinate.planetWidth - 1}`);
+    }
+    if (longitude >= this.planetHeight) {
+      throw new Error(`Longitude cannot be bigger than ${Coordinate.planetHeight - 1}`);
     }
     return new Coordinate(latitude, longitude);
   }
@@ -16,23 +22,27 @@ export class Coordinate {
   }
 
   increaseLatitude() {
-    const latitude = this.increaseValue(this.latitude, this.planetWidth);
+    const latitude = this.increaseValue(this.latitude, Coordinate.planetWidth);
     return Coordinate.create(latitude, this.longitude);
   }
 
   decreaseLatitude() {
-    const latitude = this.decreaseValue(this.latitude, this.planetWidth - 1);
+    const latitude = this.decreaseValue(this.latitude, Coordinate.planetWidth - 1);
     return Coordinate.create(latitude, this.longitude);
   }
 
   increaseLongitude() {
-    const longitude = this.increaseValue(this.longitude, this.planetHeight - 1);
+    const longitude = this.increaseValue(this.longitude, Coordinate.planetHeight - 1);
     return Coordinate.create(this.latitude, longitude);
   }
 
   decreaseLongitude() {
-    const longitude = this.decreaseValue(this.longitude, this.planetHeight - 1);
+    const longitude = this.decreaseValue(this.longitude, Coordinate.planetHeight - 1);
     return Coordinate.create(this.latitude, longitude);
+  }
+
+  equals(coordinate: Coordinate) {
+    return this.latitude === coordinate.latitude && this.longitude === coordinate.longitude;
   }
 
   private increaseValue(value: number, limit: number) {
