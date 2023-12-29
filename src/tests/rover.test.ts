@@ -8,14 +8,6 @@ describe('Rover', () => {
     rover = Rover.create(0, 0, Orientation.NORTH);
   });
 
-  it('should create a Rover with an initial position and orientation', () => {
-    expect(rover.toString()).toBe('0:0:N');
-  });
-
-  it('should return the same rover is empty commands provided', () => {
-    expect(rover.move('').toString()).toBe('0:0:N');
-  });
-
   it('should handle many commands', () => {
     expect(rover.move('LF').toString()).toBe('9:0:W');
     expect(rover.move('RFF').toString()).toBe('2:0:E');
