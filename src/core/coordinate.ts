@@ -5,6 +5,9 @@ export class Coordinate {
   constructor(private latitude: number, private longitude: number) { }
 
   static create(latitude: number, longitude: number) {
+    if (latitude < 0 || longitude < 0) {
+      throw new Error('Negative values are not allowed');
+    }
     return new Coordinate(latitude, longitude);
   }
 
