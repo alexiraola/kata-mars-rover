@@ -8,7 +8,7 @@ export enum Orientation {
 };
 
 export class NavigatorFactory {
-  static createNavigator(coordinate: Coordinate, orientation: Orientation) {
+  static createNavigator(coordinate: Coordinate, orientation: Orientation): Navigator {
     switch (orientation) {
       case Orientation.NORTH:
         return new NorthFacingNavigator(coordinate);
