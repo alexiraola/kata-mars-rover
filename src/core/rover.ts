@@ -1,13 +1,13 @@
 import { CommandFactory } from "./command";
 import { Coordinate } from "./coordinate";
-import { Orientation, Location, LocationFactory } from "./location";
+import { Orientation, Navigator, NavigatorFactory } from "./navigator";
 
 export class Rover {
-  private constructor(private location: Location) { }
+  private constructor(private location: Navigator) { }
 
   static create(latitude: number, longitude: number, orientation: Orientation) {
     const coordinate = new Coordinate(latitude, longitude);
-    const location = LocationFactory.createLocation(coordinate, orientation);
+    const location = NavigatorFactory.createNavigator(coordinate, orientation);
 
     return new Rover(location);
   }

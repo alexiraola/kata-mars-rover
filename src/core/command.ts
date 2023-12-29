@@ -1,4 +1,4 @@
-import { Location } from './location';
+import { Navigator } from './navigator';
 
 export enum CommandType {
   LEFT = 'L',
@@ -21,23 +21,23 @@ export class CommandFactory {
 }
 
 export interface Command {
-  apply(location: Location): Location;
+  apply(location: Navigator): Navigator;
 }
 
 class LeftCommand implements Command {
-  apply(location: Location) {
+  apply(location: Navigator) {
     return location.rotateLeft();
   }
 }
 
 class RightCommand implements Command {
-  apply(location: Location) {
+  apply(location: Navigator) {
     return location.rotateRight();
   }
 }
 
 class ForwardCommand implements Command {
-  apply(location: Location) {
+  apply(location: Navigator) {
     return location.moveForward();
   }
 }

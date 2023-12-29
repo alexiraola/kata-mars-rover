@@ -1,4 +1,4 @@
-import { Orientation } from '../core/location';
+import { Orientation } from '../core/navigator';
 import { Rover } from '../core/rover';
 
 describe('Rover', () => {
