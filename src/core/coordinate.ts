@@ -22,7 +22,7 @@ export class Coordinate {
   }
 
   increaseLatitude() {
-    const latitude = this.increaseValue(this.latitude, Coordinate.planetWidth);
+    const latitude = this.increaseValue(this.latitude, Coordinate.planetWidth - 1);
     return Coordinate.create(latitude, this.longitude);
   }
 

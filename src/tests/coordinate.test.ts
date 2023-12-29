@@ -37,4 +37,28 @@ describe('Coordinate', () => {
 
     expect(coordinate.decreaseLongitude().equals(Coordinate.create(0, 0))).toBeTruthy();
   });
+
+  it('starts the latitude from 0 when it reaches the world limit', () => {
+    const coordinate = Coordinate.create(9, 1);
+
+    expect(coordinate.increaseLatitude().equals(Coordinate.create(0, 1))).toBeTruthy();
+  });
+
+  it('starts the longitude from 0 when it reaches the world limit', () => {
+    const coordinate = Coordinate.create(9, 9);
+
+    expect(coordinate.increaseLongitude().equals(Coordinate.create(9, 0))).toBeTruthy();
+  });
+
+  it('starts the latitude from limit when it reaches the world start', () => {
+    const coordinate = Coordinate.create(0, 1);
+
+    expect(coordinate.decreaseLatitude().equals(Coordinate.create(9, 1))).toBeTruthy();
+  });
+
+  it('starts the longitude from limit when it reaches the world start', () => {
+    const coordinate = Coordinate.create(1, 0);
+
+    expect(coordinate.decreaseLongitude().equals(Coordinate.create(1, 9))).toBeTruthy();
+  });
 })
