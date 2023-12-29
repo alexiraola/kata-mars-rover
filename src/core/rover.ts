@@ -6,7 +6,7 @@ export class Rover {
   private constructor(private location: Navigator) { }
 
   static create(latitude: number, longitude: number, orientation: Orientation) {
-    const coordinate = new Coordinate(latitude, longitude);
+    const coordinate = Coordinate.create(latitude, longitude);
     const location = NavigatorFactory.createNavigator(coordinate, orientation);
 
     return new Rover(location);
